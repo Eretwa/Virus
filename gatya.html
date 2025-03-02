@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendszerhiba - Vírus észlelve!</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: "Courier New", Courier, monospace;
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+            overflow: hidden; /* Az oldal ne gördüljön */
+            transition: background-color 0.5s;
+        }
+        #error-message {
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
+        #random-letters {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+
+        /* Láthatatlan kocka */
+        #message-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .message {
+            position: absolute;
+            color: white;
+            font-size: 16px;
+            font-family: "Courier New", Courier, monospace;
+            opacity: 1;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .countdown {
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #simulation-message {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: yellow;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: "Courier New", Courier, monospace;
+            z-index: 9999; /* Magas z-index, hogy mindig a többi tartalom fölött legyen */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="simulation-message">Ez csak szimuláció!</div>
+    <h1>Rendszerhiba - Vírus észlelve!</h1>
+    <div id="random-letters"></div>
+    <div id="error-message"></div>
+    <div id="message-container"></div>
+
+    <script>
+        let stopGenerating = false;
+
+        
+        function generateRandomLetters() {
+            if (stopGenerating) return;
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let randomText = "";
+            for (let i = 0; i < 50; i++) {
+                randomText += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            document.getElementById("random-letters").innerHTML = randomText;
+        }
+
+        
+        function generateErrorMessage() {
+            if (stopGenerating) return;
+            const errorMessages = [
+                "Hiba: Rendszerösszeomlás! Kérem ne kapcsolja ki a számítógépet!",
+                "Figyelmeztetés: Vírus észlelve! Az önrendszere veszélyben van!",
+                "Hiba: Ismeretlen hiba történt! A fájlok sérültek lehetnek.",
+                "Vírus támadás! Az operációs rendszer leállításra kerül.",
+                "Rendszerhiba! A fájlok hozzáférhetetlenek.",
+                "Rendszer frissítés szükséges! A fájlok nem biztonságosak.",
+                "Rendellenes tevékenység észlelve. A tűzfal kikapcsolva.",
+                "Hiba: Hálózati csatlakozás megszakadva! Ellenőrizze a kapcsolatot."
+            ];
+            const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+            document.getElementById("error-message").innerHTML = randomError;
+        }
+
+        
+        function generateRandomMessage() {
+            if (stopGenerating) return;
+            const messages = [
+                "Lehet vásárolni egy új vírusvédelmi programot.",
+                "Figyelem! Az Ön adatai veszélyben vannak!",
+                "Hiba történt: A rendszer nem válaszol.",
+                "Kérjük, frissítse a rendszerét az új verzióra.",
+                "A vírus eltávolítása folyamatban...",
+                "A fájlok helyreállítása...",
+                "Új üzenet érkezett: Válaszoljon azonnal!",
+                "Rendszerhiba: Az operációs rendszer leáll.",
+                "A számítógép túlterhelt. Kérjük, várjon.",
+                "A fájlok sérültek. Kérem, hajtsa végre a szükséges műveleteket.",
+                "Hálózati hiba: Nem lehet csatlakozni a szerverhez.",
+                "A számítógép nem reagál. Az operációs rendszer leáll.",
+                "Fájlok törölve! Kérem, frissítse a rendszert.",
+                "A program nem válaszol! Kérem, zárja be a programot.",
+                "A rendszer naprakész! A legújabb vírusvédelmi frissítések telepítve.",
+                "Új program telepítése. Kérjük, ne zárja be az ablakot.",
+                "Adatok biztonságosak. Kérem ne aggódjon!",
+                "Vírus észlelve! A számítógép már védelem alatt áll.",
+                "Művelet sikeres: Az összes vírus eltávolítva."
+            ];
+
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            messageElement.innerText = randomMessage;
+
+            
+            const x = Math.floor(Math.random() * window.innerWidth);
+            const y = Math.floor(Math.random() * window.innerHeight);
+
+            messageElement.style.left = `${x}px`;
+            messageElement.style.top = `${y}px`;
+
+            
+            document.getElementById("message-container").appendChild(messageElement);
+        }
+
+        
+        function startCountdown() {
+            let countdown = 3;
+            const countdownElement = document.createElement("div");
+            countdownElement.classList.add("countdown");
+            countdownElement.innerText = countdown;
+            document.body.appendChild(countdownElement);
+
+            const interval = setInterval(() => {
+                countdown--;
+                countdownElement.innerText = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.body.innerHTML = "<h1 style='color: red;'>Vírus telepítve!</h1>";
+                        setTimeout(() => window.close(), 1000); // Weboldal bezárása
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        
+        function startFlashing() {
+            let flashState = true;
+            const flashInterval = setInterval(() => {
+                if (!stopGenerating) {
+                    document.body.style.backgroundColor = flashState ? 'red' : 'black';
+                    flashState = !flashState;
+                }
+            }, 500);
+
+            setTimeout(() => {
+                clearInterval(flashInterval); 
+            }, 3000);
+        }
+
+        
+        setTimeout(() => {
+            stopGenerating = true; 
+            startFlashing(); 
+            startCountdown(); 
+        }, 5000);
+
+        // Véletlenszerű karakterek generálása folyamatosan
+        setInterval(generateRandomLetters, 50); 
+        // Véletlenszerű hibaüzenet generálása
+        setInterval(generateErrorMessage, 1000); 
+        // Véletlenszerű üzenetek generálása a láthatatlan kockában
+        setInterval(generateRandomMessage, 100); 
+    </script>
+</body>
+</html>
